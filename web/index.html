@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NetSim - 网络模拟器</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <svg width="28" height="28" viewBox="0 0 28 28">
+      <circle cx="14" cy="14" r="12" fill="none" stroke="#4cc9f0" stroke-width="2"/>
+      <circle cx="14" cy="14" r="4" fill="#4cc9f0"/>
+      <path d="M14 2v4M14 22v4M2 14h4M22 14h4" stroke="#4cc9f0" stroke-width="2"/>
+    </svg>
+    <h1>NetSim <span>网络模拟器</span></h1>
+  </div>
+  <div class="topbar-right">
+    <span class="legend-label">Vendor:</span>
+    <span class="chip chip-huawei">Huawei</span>
+    <span class="chip chip-cisco">Cisco</span>
+    <button id="btn-refresh" title="刷新拓扑">⟳ 刷新</button>
+  </div>
+</header>
+
+<main>
+  <section id="workspace">
+    <div id="topo-toolbar">
+      <span class="toolbar-title">拓扑</span>
+      <div class="toolbar-actions">
+        <button class="tool-btn" id="btn-zoom-in" title="放大">＋</button>
+        <button class="tool-btn" id="btn-zoom-out" title="缩小">－</button>
+        <button class="tool-btn" id="btn-fit" title="适应窗口">⤢</button>
+      </div>
+    </div>
+    <div id="topo-canvas">
+      <div id="topo-hint">加载中…</div>
+    </div>
+  </section>
+
+  <section id="console-panel">
+    <div id="console-toolbar">
+      <span class="toolbar-title">终端</span>
+      <span id="session-label">未连接设备</span>
+    </div>
+    <div id="term"></div>
+  </section>
+</main>
+
+<div id="device-modal" class="modal hidden">
+  <div class="modal-box">
+    <div class="modal-title">添加设备</div>
+    <div class="modal-grid">
+      <button class="modal-item" data-type="router" data-vendor="huawei">
+        <span class="icon-dev router"></span><span>AR 路由器</span>
+      </button>
+      <button class="modal-item" data-type="switch" data-vendor="huawei">
+        <span class="icon-dev switch"></span><span>S 交换机</span>
+      </button>
+      <button class="modal-item" data-type="host" data-vendor="huawei">
+        <span class="icon-dev host"></span><span>PC (华为)</span>
+      </button>
+      <button class="modal-item" data-type="router" data-vendor="cisco">
+        <span class="icon-dev router-cisco"></span><span>ISR 路由器</span>
+      </button>
+      <button class="modal-item" data-type="switch" data-vendor="cisco">
+        <span class="icon-dev switch-cisco"></span><span>Catalyst 交换机</span>
+      </button>
+      <button class="modal-item" data-type="host" data-vendor="cisco">
+        <span class="icon-dev host-cisco"></span><span>PC (Cisco)</span>
+      </button>
+    </div>
+    <div class="modal-close">✕ 关闭</div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

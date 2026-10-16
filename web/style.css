@@ -1,0 +1,149 @@
+/* NetSim professional networking UI */
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #0f1420;
+  --panel: #151c2c;
+  --panel-2: #1a2338;
+  --border: #263247;
+  --text: #c9d4e8;
+  --text-dim: #7a88a6;
+  --accent: #4cc9f0;
+  --accent-2: #f72585;
+  --huawei: #fec92e;
+  --cisco: #00a1e9;
+  --green: #4ade80;
+  --red: #f87171;
+  --mono: 'Cascadia Code', Consolas, 'JetBrains Mono', 'Courier New', monospace;
+}
+
+html, body { height: 100%; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Segoe UI', 'Microsoft YaHei', system-ui, sans-serif;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ---- top bar ---- */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 18px;
+  background: linear-gradient(180deg, #1a2338, #151c2c);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.brand { display: flex; align-items: center; gap: 10px; }
+.brand h1 { font-size: 18px; font-weight: 600; letter-spacing: .5px; color: #fff; }
+.brand h1 span { font-size: 12px; color: var(--text-dim); font-weight: 400; margin-left: 6px; }
+.topbar-right { display: flex; align-items: center; gap: 10px; }
+.legend-label { font-size: 12px; color: var(--text-dim); }
+.chip { font-size: 11px; padding: 3px 10px; border-radius: 20px; font-weight: 600; }
+.chip-huawei { background: rgba(254,201,46,.15); color: var(--huawei); border: 1px solid rgba(254,201,46,.4); }
+.chip-cisco { background: rgba(0,161,233,.15); color: var(--cisco); border: 1px solid rgba(0,161,233,.4); }
+#btn-refresh {
+  background: var(--accent); color: #04222e; border: none;
+  padding: 6px 14px; border-radius: 6px; font-weight: 600; cursor: pointer;
+  transition: filter .15s;
+}
+#btn-refresh:hover { filter: brightness(1.15); }
+
+/* ---- main ---- */
+main { flex: 1; display: flex; flex-direction: column; min-height: 0; }
+
+#workspace { flex: 3; display: flex; flex-direction: column; min-height: 0; border-bottom: 1px solid var(--border); }
+#console-panel { flex: 2; display: flex; flex-direction: column; min-height: 0; }
+
+#topo-toolbar, #console-toolbar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 6px 14px; background: var(--panel); border-bottom: 1px solid var(--border); flex-shrink: 0;
+}
+.toolbar-title { font-size: 12px; color: var(--text-dim); font-weight: 600; letter-spacing: 1px; text-transform: uppercase; }
+.toolbar-actions { display: flex; gap: 6px; }
+.tool-btn {
+  width: 26px; height: 26px; background: var(--panel-2); color: var(--text);
+  border: 1px solid var(--border); border-radius: 5px; cursor: pointer; font-size: 14px; line-height: 1;
+}
+.tool-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+#session-label { font-size: 12px; color: var(--text-dim); }
+#session-label.active { color: var(--green); }
+
+/* ---- topology canvas ---- */
+#topo-canvas {
+  flex: 1; position: relative; overflow: hidden;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(76,201,240,.05), transparent 60%),
+    var(--bg);
+  background-image:
+    linear-gradient(rgba(255,255,255,.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.02) 1px, transparent 1px);
+  background-size: 24px 24px;
+  cursor: grab;
+}
+#topo-canvas.dragging { cursor: grabbing; }
+#topo-hint { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: var(--text-dim); font-size: 13px; }
+
+.topo-svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+
+.link-line { stroke: #3b4d6b; stroke-width: 2; }
+.link-line.hot { stroke: var(--accent); stroke-width: 3; filter: drop-shadow(0 0 4px var(--accent)); }
+
+.link-label { font-size: 10px; fill: var(--text-dim); font-family: var(--mono); }
+
+.node-group { cursor: pointer; }
+.node-group.selected .node-rect { stroke: var(--accent); stroke-width: 2.5; filter: drop-shadow(0 0 8px rgba(76,201,240,.5)); }
+.node-rect {
+  stroke: var(--border); stroke-width: 1.5;
+  transition: stroke .15s, filter .15s;
+}
+.node-group:hover .node-rect { stroke: var(--accent); }
+.node-name { font-size: 12px; font-weight: 600; fill: #fff; }
+.node-type { font-size: 9px; fill: var(--text-dim); }
+.node-ip { font-size: 9px; fill: #8fb3d9; font-family: var(--mono); }
+.port-dot { fill: var(--green); stroke: #0f1420; stroke-width: 1; }
+
+/* device icon glyphs */
+.icon-glyph { font-size: 14px; }
+
+/* ---- terminal ---- */
+#term {
+  flex: 1; background: #0a0e16; font-family: var(--mono); font-size: 13px;
+  line-height: 1.55; padding: 10px 14px; overflow-y: auto; white-space: pre-wrap;
+  word-break: break-all; outline: none; min-height: 0;
+}
+#term .prompt { color: var(--accent); font-weight: 600; }
+#term .cursor { display: inline-block; width: 8px; height: 15px; background: var(--text); animation: blink 1s step-end infinite; vertical-align: text-bottom; }
+@keyframes blink { 50% { opacity: 0; } }
+#term .sys-msg { color: var(--text-dim); }
+#term .ok { color: var(--green); }
+#term .err { color: var(--red); }
+
+/* ---- modal ---- */
+.modal { position: fixed; inset: 0; background: rgba(4,8,15,.7); display: flex; align-items: center; justify-content: center; z-index: 100; }
+.modal.hidden { display: none; }
+.modal-box { background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 20px; width: 420px; box-shadow: 0 20px 60px rgba(0,0,0,.5); }
+.modal-title { font-size: 15px; font-weight: 600; margin-bottom: 14px; color: #fff; }
+.modal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.modal-item {
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  background: var(--panel-2); border: 1px solid var(--border); border-radius: 8px;
+  padding: 14px 10px; color: var(--text); cursor: pointer; font-size: 12px;
+  transition: border-color .15s, transform .1s;
+}
+.modal-item:hover { border-color: var(--accent); transform: translateY(-2px); }
+.modal-close { text-align: center; margin-top: 14px; color: var(--text-dim); font-size: 12px; cursor: pointer; }
+.modal-close:hover { color: var(--text); }
+
+.icon-dev { width: 36px; height: 36px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 16px; }
+.icon-dev.router { background: rgba(254,201,46,.2); }
+.icon-dev.router-cisco { background: rgba(0,161,233,.2); }
+.icon-dev.switch { background: rgba(76,201,240,.2); }
+.icon-dev.switch-cisco { background: rgba(0,161,233,.2); }
+.icon-dev.host { background: rgba(74,222,128,.15); }
+.icon-dev.host-cisco { background: rgba(0,161,233,.15); }
